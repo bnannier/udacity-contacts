@@ -35,9 +35,12 @@ class App extends Component {
     render() {
         return (
             <div>
+                <div>3.3: Stateless functional component</div>
+                <ListContactsStateless onDeleteContact={this.removeContact} contacts={this.state.contacts} />
+                <br />
+                <div>3.4: Stateful component</div>
                 <ListContacts onDeleteContact={this.removeContact} contacts={this.state.contacts} />
                 <br />
-                <ListContactsStateless onDeleteContact={this.removeContact} contacts={this.state.contacts} />
             </div>
         )
     }
