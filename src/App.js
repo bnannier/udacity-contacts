@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
+import { Route } from 'react-router-dom'
 import ListContacts from './ListContacts'
-import ListContactsStateless from './ListContactsStateless'
+import CreateContact from './CreateContact'
 import * as ContactsAPI from './utils/ContactsAPI'
-
 
 class App extends Component {
     state = {
@@ -20,15 +20,32 @@ class App extends Component {
 
         ContactsAPI.remove(contact)
     }
+
+    createContact(contact) {
+        ContactsAPI.create(contact).then(contact => {
+            this.setState(state => ({
+                contacts: state.contacts.concat([ contact ])
+            }))
+        })
+    }
+
     render() {
         return (
             <div>
-                <br /><br /><br />
-                <div>3.3: Stateless functional component</div>
-                <ListContactsStateless onDeleteContact={this.removeContact} contacts={this.state.contacts} />
-                <div>3.4: Stateful component</div>
-                <ListContacts onDeleteContact={this.removeContact} contacts={this.state.contacts} />
-                <br />
+                <Route exact path='/' render={() => (
+                    <ListContacts
+                        onDeleteContact={this.removeContact}
+                        contacts={this.state.contacts}
+                    />
+                )}/>
+                <Route path='/create' render={({ history }) => (
+                    <CreateContact
+                        onCreateContact={(contact) => {
+                            this.createContact(contact)
+                            history.push('/')
+                        }}
+                    />
+                )}/>
             </div>
         )
     }
